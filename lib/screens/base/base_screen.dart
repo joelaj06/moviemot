@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie_mot/core/themes/app_theme.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 
 import '../../core/nav/bottom_nav_tabs.dart';
@@ -24,21 +25,29 @@ class _BaseScreenState extends State<BaseScreen> {
   Widget _buildBottomNavigation() {
     return StylishBottomBar(
       option: BubbleBarOptions(
-        // barStyle: BubbleBarStyle.vertical,
         barStyle: BubbleBarStyle.horizontal,
         bubbleFillStyle: BubbleFillStyle.fill,
-        // bubbleFillStyle: BubbleFillStyle.outlined,
-        opacity: 0.3,
+        opacity: 1,
       ),
       iconSpace: 12.0,
       items: List.generate(
         navIconList.length,
         (index) => BottomBarItem(
-          icon: Icon(navIconList[index]),
-          title: Text(navIconTexts[index]),
+          icon: Icon(
+            navIconList[index],
+            color:
+                _selectedIndex == index ? Colors.white : Colors.grey,
+          ),
+          title: Text(
+            navIconTexts[index],
+            style: TextStyle(
+                color: _selectedIndex == index ? Colors.white : Colors.black),
+          ),
           unSelectedColor: Colors.grey,
           selectedColor: Colors.white,
-          backgroundColor: _selectedIndex == index ? Colors.blue : Colors.white,
+
+          backgroundColor:
+              _selectedIndex == index ? context.colors.primary.shade900 : Colors.white,
         ),
       ),
       hasNotch: true,
