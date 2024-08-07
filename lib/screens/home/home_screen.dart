@@ -1,14 +1,13 @@
 
-import 'package:flutter/cupertino.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:movie_mot/constants/app_assets_images.dart';
 import 'package:movie_mot/constants/app_padding.dart';
 import 'package:movie_mot/constants/app_spacing.dart';
 import 'package:movie_mot/controllers/home/home_controller.dart';
-import 'package:movie_mot/core/themes/app_theme.dart';
-import 'package:movie_mot/core/themes/hint_color.dart';
 import 'package:movie_mot/core/themes/theme.dart';
+import 'package:movie_mot/models/response/movie/movie_model.dart';
 
 import '../../core/widgets/app_text_input_field.dart';
 
@@ -17,6 +16,7 @@ class HomeScreen extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+  // controller.getPopularMovies();
     return Scaffold(
         appBar: AppBar(
           centerTitle: false,
@@ -81,13 +81,13 @@ class HomeScreen extends GetView<HomeController> {
               ),
               _buildMovieHeader(context,
                   title: 'What\'s Popular', actionTitle: 'Streaming'),
-              _buildPopularMovieList(context),
+              _buildMovieList(context, controller.movies),
               const AppSpacing(
                 v: 10,
               ),
               _buildMovieHeader(context,
                   title: 'Free to watch', actionTitle: 'Movie'),
-              _buildPopularMovieList(context),
+              _buildMovieList(context,<Movie>[].obs),
             ],
           ),
         ));
@@ -127,7 +127,7 @@ class HomeScreen extends GetView<HomeController> {
     );
   }
 
-  Widget _buildPopularMovieList(BuildContext context) {
+  Widget _buildMovieList(BuildContext context, RxList<Movie> movies) {
     return SizedBox(
       height: 300,
       child: Obx(
@@ -141,81 +141,101 @@ class HomeScreen extends GetView<HomeController> {
             : ListView.builder(
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
-                itemCount: 4,
+                itemCount: movies.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return _buildPopularMovieCard(context);
+                  return Obx(() => _buildMovieCard(context, movie: movies[index]));
                 }),
       ),
     );
   }
 
-  Widget _buildPopularMovieCard(BuildContext context) {
-    return Padding(
-      padding: AppPaddings.sA,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            height: 230,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              // border: Border.all(color: context.colors.primary, width: 2),
-            ),
-            child: Stack(
-              children: [
-                ClipRRect(
+  Widget _buildMovieCard(BuildContext context, {Movie? movie}) {
+    final poster = movie?.posterPath ?? '';
+    return GestureDetector(
+      onTap: ()=> controller.navigateToMovieDetailsScreen(movie!),
+      child: Padding(
+        padding: AppPaddings.sA,
+        child: SizedBox(
+          width: 180,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 230,
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  child: Image.asset(
-                    AssetImages.blade,
-                    width: 190,
-                    height: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
+                  // border: Border.all(color: context.colors.primary, width: 2),
                 ),
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      padding: const EdgeInsets.all(4.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.5),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: const Icon(
-                        Icons.favorite_border_outlined,
-                        color: Colors.white,
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: poster.isEmpty ? Image.asset(
+                        AssetImages.blade,
+                        width: 190,
+                        height: double.infinity,
+                        fit: BoxFit.cover,
+                      ) :  CachedNetworkImage(
+                        fit: BoxFit.cover,
+                        width: 190,
+                        imageUrl:'https://image.tmdb.org/t/p/w500$poster',
+                        placeholder: (BuildContext context, String url) =>
+                            Image.asset(
+                              AssetImages.noImage,
+                            ),
+                        errorWidget: (BuildContext context, String url,
+                            dynamic error) =>
+                        const Icon(Icons.error),
                       ),
                     ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                'Blade 2',
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 24,
-                  color: Colors.black,
+                    Positioned(
+                      top: 8,
+                      right: 8,
+                      child: GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          padding: const EdgeInsets.all(4.0),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: const Icon(
+                            Icons.favorite_border_outlined,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Text(
-                '19/05/2000',
-                style: TextStyle(
-                  color: Colors.black,
-                ),
+               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    movie?.title ?? 'N/A',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 22,
+                      color: Colors.black,
+                    ),
+                  ),
+                  Text(
+                   movie?.releaseDate ?? 'N/A',
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }

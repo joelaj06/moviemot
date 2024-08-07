@@ -13,17 +13,17 @@ import 'package:http_interceptor/models/interceptor_contract.dart';
 
 import '../errors/app_exceptions.dart';
 import 'app_log.dart';
+import 'environment.dart';
 
 class AppHTTPClient {
 
-
   final http.Client _client = InterceptedClient.build(
       interceptors: <InterceptorContract>[
-
+        AuthInterceptor()
       ]);
 
   static const int requestTimeout = 30;
-  static String baseUrl = '';
+  static String baseUrl = 'https://api.themoviedb.org/3/';
 
   //GET
   Future<Map<String, dynamic>> get(String endpoint) async {
@@ -132,7 +132,6 @@ class AppHTTPClient {
       case 200:
         final dynamic responseJson =
             jsonDecode(utf8.decode(response.bodyBytes));
-        final String? totalCount = response.headers['total-count'];
         AppLog.i(
             '============================ BODY RECEIVED ========================');
         AppLog.i(response.body);
@@ -140,18 +139,11 @@ class AppHTTPClient {
         if (responseJson is List) {
           data = <String, dynamic>{
             'items': responseJson,
-            'total_count': totalCount
           };
         }
 
         if (responseJson is Map<String, dynamic>) {
-          if (endpoint.contains('users/auth/login')) {
-            final Map<String, String> header = response.headers;
             data = responseJson;
-            data['user_token_validation']['token'] = header['access_token'];
-          } else {
-            data = responseJson;
-          }
         }
         return data;
       case 400:
@@ -185,14 +177,12 @@ class AppHTTPClient {
 
 class AuthInterceptor extends InterceptorContract {
 
-
   @override
   FutureOr<BaseRequest> interceptRequest({required BaseRequest request}) async {
-    const String token = "";
     final Map<String, String> headers = Map<String, String>.from(request.headers);
     final Map<String, String> newHeaders = <String, String>{
       HttpHeaders.contentTypeHeader: 'application/json',
-      'Authorization': 'Bearer ${token}'
+      'Authorization': 'Bearer $token'
     };
     headers.addAll(newHeaders);
 

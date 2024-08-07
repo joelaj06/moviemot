@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:movie_mot/bindings/main_bindings.dart';
 
 import '../routes/routes.dart';
 import '../themes/app_light_theme.dart';
@@ -18,7 +19,8 @@ class MovieMot extends StatelessWidget {
           theme: AppTheme(AppLightTheme()).data,
           title: 'Movie Mot',
           getPages: Pages.pages,
-          initialRoute:  AppRoutes.base
+          initialRoute:  AppRoutes.base,
+          initialBinding: MainBindings(),
       ),
     );
   }

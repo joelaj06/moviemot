@@ -1,7 +1,10 @@
 import 'package:get/get.dart';
 import 'package:movie_mot/bindings/home/home_bindings.dart';
+import 'package:movie_mot/bindings/movie/movie_bindings.dart';
+import 'package:movie_mot/controllers/movie/movie_controller.dart';
 import 'package:movie_mot/screens/favorite/favorite_screen.dart';
 import 'package:movie_mot/screens/home/home_screen.dart';
+import 'package:movie_mot/screens/movie_detail/movie_details_screen.dart';
 import 'package:movie_mot/screens/settings/settings_screen.dart';
 
 import '../../screens/base/base_screen.dart';
@@ -27,6 +30,10 @@ class Pages {
     GetPage<AppRoutes>(
       name: AppRoutes.settings,
       page: () => const SettingsScreen(),
+    ), GetPage<AppRoutes>(
+      name: AppRoutes.movieDetails,
+      page: () => const MovieDetailsScreen(),
+      binding: MovieBindings(),
     ),
   ];
 }
