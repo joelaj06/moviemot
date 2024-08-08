@@ -6,6 +6,7 @@ import 'package:movie_mot/screens/favorite/favorite_screen.dart';
 import 'package:movie_mot/screens/home/home_screen.dart';
 import 'package:movie_mot/screens/movie_detail/movie_details_screen.dart';
 import 'package:movie_mot/screens/settings/settings_screen.dart';
+import 'package:movie_mot/screens/video/video_screen.dart';
 
 import '../../screens/base/base_screen.dart';
 import 'app_routes.dart';
@@ -34,6 +35,9 @@ class Pages {
       name: AppRoutes.movieDetails,
       page: () => const MovieDetailsScreen(),
       binding: MovieBindings(),
-    ),
+    ),/*GetPage<AppRoutes>(
+      name: AppRoutes.videoPlayer,
+      page: () => const VideoPlayerScreen(videoLink: '',),
+    ),*/
   ];
 }

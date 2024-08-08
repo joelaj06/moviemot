@@ -5,5 +5,6 @@ class AppRoutes{
   static const String favorite= '/favorite';
   static const String settings= '/settings';
   static const String movieDetails= '/movieDetails';
+  static const String videoPlayer= '/videoPlayer';
 
 }

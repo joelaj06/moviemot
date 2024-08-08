@@ -5,6 +5,7 @@ import 'package:movie_mot/data/repositories/remote_repository/remote_repository.
 import 'package:movie_mot/models/response/cast/credit_model.dart';
 import 'package:movie_mot/models/response/movie/movie_detail_model.dart';
 import 'package:movie_mot/models/response/movie/movie_result_model.dart';
+import 'package:movie_mot/models/response/video/video_result_model.dart';
 
 import '../../datasource/remote_datasource.dart';
 
@@ -25,6 +26,11 @@ class RemoteRepositoryImpl  extends Repository implements RemoteRepository {
   @override
   Future<Either<Failure, Credit>> fetchMovieCredits(int movieId) {
     return makeRequest(remoteDatasource.fetchMovieCredits(movieId));
+  }
+
+  @override
+  Future<Either<Failure, VideoResult>> fetchMovieVideos(int movieId) {
+    return makeRequest(remoteDatasource.fetchMovieVideos(movieId));
   }
 
 }

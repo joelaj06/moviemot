@@ -22,8 +22,7 @@ class MovieDetailsScreen extends GetView<MovieController> {
     String image = '';
     if (args != null) {
       image = args.movie.backdropPath ?? '';
-      //  controller.getMovieDetail(args.movie.id);
-      // controller.getMovieCredits(args.movie.id);
+      controller.getMovie(args.movie.id);
     }
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -68,50 +67,54 @@ class MovieDetailsScreen extends GetView<MovieController> {
           )
         ],
       ),
-      body: Column(
-        children: [
-          _buildBackdrop(context, image, args),
-          Padding(
-            padding: AppPaddings.mA,
-            child: Column(
-              children: [
-                Obx(() => Text(controller.movieDetail.value.overview ?? '')),
-                const AppSpacing(
-                  v: 10,
-                ),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Cast',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            _buildBackdrop(context, image, args),
+            Padding(
+              padding: AppPaddings.mA,
+              child: Column(
+                children: [
+                  Obx(() => Text(controller.movieDetail.value.overview ?? '')),
+                  const AppSpacing(
+                    v: 10,
+                  ),
+                  const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Cast',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-                const AppSpacing(
-                  v: 10,
-                ),
-                _buildCastList(context, args),
-                const AppSpacing(v: 10),
-                AppButton(
-                  onPressed: () {},
-                  text: 'Watch Trailer',
-                  backgroundColor: context.colors.primary.shade900,
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text('Download',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                  ),),
-                ),
-              ],
+                  const AppSpacing(
+                    v: 10,
+                  ),
+                  _buildCastList(context, args),
+                  const AppSpacing(v: 10),
+                  Obx(() => AppButton(
+                      onPressed: () => controller.playTrailer(context),
+                      enabled: controller.enablePlayButton.value,
+                      text: 'Watch Trailer',
+                      backgroundColor: context.colors.primary.shade900,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: const Text('Download',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                    ),),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
