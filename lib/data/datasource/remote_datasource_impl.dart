@@ -13,9 +13,9 @@ class RemoteDatasourceImpl implements RemoteDatasource {
   final AppHTTPClient _client;
 
   @override
-  Future<MovieResult> fetchPopularMovies() async {
+  Future<MovieResult> fetchPopularMovies({required int page}) async {
     final Map<String, dynamic> json =
-        await _client.get(Endpoints.popularMovies);
+        await _client.get(Endpoints.popularMovies(page: page));
     return MovieResult.fromJson(json);
   }
 
@@ -38,5 +38,12 @@ class RemoteDatasourceImpl implements RemoteDatasource {
     final Map<String, dynamic> json =
         await _client.get(Endpoints.movieVideos(movieId));
     return VideoResult.fromJson(json);
+  }
+
+  @override
+  Future<MovieResult> searchMovies(String query) async {
+    final Map<String, dynamic> json =
+        await _client.get(Endpoints.searchMovies( query: query));
+    return MovieResult.fromJson(json);
   }
 }

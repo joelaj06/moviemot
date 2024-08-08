@@ -43,8 +43,6 @@ class MovieController extends GetxController {
     'Vimeo': 'https://player.vimeo.com/',
   };
 
-
-
   void getMovie(int movieId) async {
     _getMovieDetail(movieId);
     _getMovieCredits(movieId);
@@ -57,12 +55,21 @@ class MovieController extends GetxController {
   }
 
   void playTrailer(BuildContext context) {
-    //retrieve first trailer with type teaser
-    final Video teaser =
-        videos.firstWhere((Video video) => video.type == 'Teaser');
-    final String videoLink = getVideoLink(teaser.key, teaser.site);
+    //retrieve first trailer
+    final Video trailer = videos.firstWhere(
+        (Video video) =>
+            video.type == 'Trailer' ||
+            video.type == 'Teaser' ||
+            video.type == 'Official Trailer',
+        orElse: () => Video.empty());
+    if (trailer == Video.empty()) {
+      Get.snackbar('Error', 'Sorry Trailer Available');
+      return;
+    }
+    final String videoLink = getVideoLink(trailer.key, trailer.site);
     debugPrint(videoLink);
-  //  Get.toNamed(AppRoutes.videoPlayer, arguments: videoLink);
+
+    //navigate to video player screen
     Navigator.push(
       context,
       MaterialPageRoute(

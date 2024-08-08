@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:movie_mot/constants/app_assets_images.dart';
 import 'package:movie_mot/constants/app_padding.dart';
@@ -176,11 +177,14 @@ class MovieDetailsScreen extends GetView<MovieController> {
                               const Icon(Icons.error),
                     ),
             ),
-            Text(
-              cast.name ?? 'N/A',
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
+            FittedBox(
+              fit: BoxFit.fill,
+              child: Text(
+                cast.name ?? 'N/A',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ],

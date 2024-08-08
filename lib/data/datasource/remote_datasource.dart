@@ -5,8 +5,9 @@ import '../../models/response/movie/movie_detail_model.dart';
 import '../../models/response/video/video_result_model.dart';
 
 abstract class RemoteDatasource{
-  Future<MovieResult> fetchPopularMovies();
+  Future<MovieResult> fetchPopularMovies({required int page});
   Future<MovieDetail> fetchMovieDetail(int movieId);
   Future<Credit> fetchMovieCredits(int movieId);
   Future<VideoResult> fetchMovieVideos(int movieId);
+  Future<MovieResult> searchMovies(String query);
 }

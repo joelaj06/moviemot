@@ -6,5 +6,6 @@ class AppRoutes{
   static const String settings= '/settings';
   static const String movieDetails= '/movieDetails';
   static const String videoPlayer= '/videoPlayer';
+  static const String movieSearch= '/movieSearch';
 
 }

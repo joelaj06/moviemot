@@ -12,11 +12,13 @@ class PageParams {
      this.page,
      this.size,
     this.movieId,
+    this.query,
 
   });
 
   final int? page;
   final int? size;
   final int? movieId;
+  final String? query;
 
 }

@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,7 +15,7 @@ class HomeScreen extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-  // controller.getPopularMovies();
+    // controller.getPopularMovies();
     return Scaffold(
         appBar: AppBar(
           centerTitle: false,
@@ -69,7 +68,11 @@ class HomeScreen extends GetView<HomeController> {
                   //  onFieldSubmitted: controller.onSearchQueryFieldSubmit,
                   textInputType: TextInputType.text,
                   hintText: 'Search for movies, tv show...',
-
+                  enabled: false,
+                  readOnly: true,
+                  onTap:  () {
+                    controller.navigateToMovieSearchScreen();
+                  },
                   textColor: Colors.black,
                   hintStyle: const TextStyle(
                     color: HintColor.color,
@@ -87,7 +90,7 @@ class HomeScreen extends GetView<HomeController> {
               ),
               _buildMovieHeader(context,
                   title: 'Free to watch', actionTitle: 'Movie'),
-              _buildMovieList(context,<Movie>[].obs),
+              _buildMovieList(context, controller.freeMovies),
             ],
           ),
         ));
@@ -102,10 +105,10 @@ class HomeScreen extends GetView<HomeController> {
         children: [
           Text(
             title,
-              style: const TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.w500,
-              ),
+            style: const TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.w500,
+            ),
           ),
           Container(
             padding: AppPaddings.mA,
@@ -143,7 +146,8 @@ class HomeScreen extends GetView<HomeController> {
                 shrinkWrap: true,
                 itemCount: movies.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return Obx(() => _buildMovieCard(context, movie: movies[index]));
+                  return Obx(
+                      () => _buildMovieCard(context, movie: movies[index]));
                 }),
       ),
     );
@@ -152,7 +156,7 @@ class HomeScreen extends GetView<HomeController> {
   Widget _buildMovieCard(BuildContext context, {Movie? movie}) {
     final poster = movie?.posterPath ?? '';
     return GestureDetector(
-      onTap: ()=> controller.navigateToMovieDetailsScreen(movie!),
+      onTap: () => controller.navigateToMovieDetailsScreen(movie!),
       child: Padding(
         padding: AppPaddings.sA,
         child: SizedBox(
@@ -171,23 +175,26 @@ class HomeScreen extends GetView<HomeController> {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: poster.isEmpty ? Image.asset(
-                        AssetImages.blade,
-                        width: 190,
-                        height: double.infinity,
-                        fit: BoxFit.cover,
-                      ) :  CachedNetworkImage(
-                        fit: BoxFit.cover,
-                        width: 190,
-                        imageUrl:'https://image.tmdb.org/t/p/w500$poster',
-                        placeholder: (BuildContext context, String url) =>
-                            Image.asset(
-                              AssetImages.noImage,
+                      child: poster.isEmpty
+                          ? Image.asset(
+                              AssetImages.blade,
+                              width: 190,
+                              height: double.infinity,
+                              fit: BoxFit.cover,
+                            )
+                          : CachedNetworkImage(
+                              fit: BoxFit.cover,
+                              width: 190,
+                              imageUrl:
+                                  'https://image.tmdb.org/t/p/w500$poster',
+                              placeholder: (BuildContext context, String url) =>
+                                  Image.asset(
+                                AssetImages.noImage,
+                              ),
+                              errorWidget: (BuildContext context, String url,
+                                      dynamic error) =>
+                                  const Icon(Icons.error),
                             ),
-                        errorWidget: (BuildContext context, String url,
-                            dynamic error) =>
-                        const Icon(Icons.error),
-                      ),
                     ),
                     Positioned(
                       top: 8,
@@ -210,7 +217,7 @@ class HomeScreen extends GetView<HomeController> {
                   ],
                 ),
               ),
-               Column(
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -226,7 +233,7 @@ class HomeScreen extends GetView<HomeController> {
                     ),
                   ),
                   Text(
-                   movie?.releaseDate ?? 'N/A',
+                    movie?.releaseDate ?? 'N/A',
                     style: const TextStyle(
                       color: Colors.black,
                     ),
@@ -239,5 +246,4 @@ class HomeScreen extends GetView<HomeController> {
       ),
     );
   }
-
 }

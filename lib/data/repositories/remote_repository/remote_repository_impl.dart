@@ -14,8 +14,8 @@ class RemoteRepositoryImpl  extends Repository implements RemoteRepository {
   final RemoteDatasource remoteDatasource;
 
   @override
-  Future<Either<Failure, MovieResult>> fetchPopularMovies() {
-    return makeRequest(remoteDatasource.fetchPopularMovies());
+  Future<Either<Failure, MovieResult>> fetchPopularMovies({required int page}) {
+    return makeRequest(remoteDatasource.fetchPopularMovies(page: page));
   }
 
   @override
@@ -31,6 +31,11 @@ class RemoteRepositoryImpl  extends Repository implements RemoteRepository {
   @override
   Future<Either<Failure, VideoResult>> fetchMovieVideos(int movieId) {
     return makeRequest(remoteDatasource.fetchMovieVideos(movieId));
+  }
+
+  @override
+  Future<Either<Failure, MovieResult>> fetchSearchMovies({required String query}) {
+    return makeRequest(remoteDatasource.searchMovies( query));
   }
 
 }
