@@ -48,6 +48,7 @@ dependencies:
   json_annotation: ^4.9.0
   cached_network_image: ^3.4.0
   youtube_player_flutter: ^8.1.2
+  flutter_native_splash: ^2.4.0
 
 dev_dependencies:
   flutter_test:
@@ -65,6 +66,15 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+flutter_native_splash:
+  color: "#40404c"
+  image: assets/images/splash_logo.png
+
+  android_12:
+    color: "#40404c"
+    image: assets/images/splash_logo.png
+
+  web: false
 
 # The following section is specific to Flutter packages.
 flutter:

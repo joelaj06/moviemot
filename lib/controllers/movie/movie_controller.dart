@@ -63,7 +63,7 @@ class MovieController extends GetxController {
             video.type == 'Official Trailer',
         orElse: () => Video.empty());
     if (trailer == Video.empty()) {
-      Get.snackbar('Error', 'Sorry Trailer Available');
+      Get.snackbar('Error', 'Sorry Trailer N Available');
       return;
     }
     final String videoLink = getVideoLink(trailer.key, trailer.site);
